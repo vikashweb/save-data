@@ -190,13 +190,14 @@ exports.Person={
     from:{ type:Text}
   }
 }
-exports.Post={
+exports.Timeline={
   fields:{
-    dateList:{type:Text,isRequired:true},
+    eventType:{type:Text,isRequired:true },
+    eventDate:{type:Text,isRequired:true},
     call:{
-      type:Relationship,ref:'Call', many:true
+      type:Relationship,ref:'Call', many:false
     },
-    message:{type:Relationship, ref:'Message',many:true }
+    message:{type:Relationship, ref:'Message', many:false }
   }
  
 }
@@ -216,10 +217,10 @@ exports.Message={
   fields:{
    
      name:{ type:Text,isRequired:true},
-     callTime:{type:Text, isRequired:true},
+     messageTime:{type:Text, isRequired:true},
    
      message:{type:Text, isRequired:true},
-     incomeType:{type:Text,isRequired:true},
+     messageIcon:{type:Text,isRequired:true},
 
 
   }

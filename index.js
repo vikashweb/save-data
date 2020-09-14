@@ -18,7 +18,7 @@ const {
   customSchema,
   Call,
   Message,
-  Post
+  Timeline
 } = require('./schema');
 
 const MEETUP = require('./meetupConfig');
@@ -28,7 +28,7 @@ const keystone = new Keystone({
   adapter: new MongooseAdapter({ mongoUri: 'mongodb://localhost/meetup' }),
   onConnect: initialiseData,
 });
-keystone.createList('Post',Post)
+keystone.createList('Timeline',Timeline)
 keystone.createList('Call',Call);
 keystone.createList('Message',Message);
 keystone.createList('Event', Event);
@@ -52,8 +52,8 @@ const adminApp = new AdminUIApp({
   authStrategy,
   pages: [
     {
-      label: 'Post',
-      children: ['Post','Call','Message'],
+      label: 'Timeline',
+      children: ['Timeline','Call','Message'],
     },
   
   ],

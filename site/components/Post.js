@@ -1,20 +1,52 @@
-import {useQuery}  from '@apollo/client';
-import {AllPosts} from '../graphql/AllPosts';
+import { useQuery } from "@apollo/client";
+import { AllPosts } from "../graphql/AllPosts";
+import { GroupBy } from "lodash";
 
 import DateOfData from "./DateOfData";
 
 const Post = () => {
+  var dateOfData =[];
+  const { loading, error, data } = useQuery(AllPosts);
+  if (loading) return <p>Loading ...</p>;
+  if (error) return <p>Error to fatch data from server.</p>;
 
-  //let DateOfData=null;
-    const { loading, error, data } = useQuery(AllPosts);
-    if(loading) return <p>Loding ...</p>;
-    if (error) return <p>Error to fatch data from server.</p>;
-      
- // DateOfData=data.
-   
-    
+  // logs gruped by date
+  const groupedLogs = { ..._.groupBy(data.allTimelines, "eventDate") };
 
+  let vikka = Object.values(groupedLogs);
 
+  for (var i=0; i <= vikka.length- 1; i++) {
+     console.log(i);
+    dateOfData[i] = vikka[i].map((cl) => {
+ 
+      if (cl.eventType === "call") {
+        return (
+          <DateOfData
+            eventDate={cl.eventDate}
+            name={cl.call.name}
+            callTime={cl.call.callTime}
+            callDuration={cl.call.callDuration}
+            incomeType={cl.call.incomeType}
+            message={cl.message}
+            key={cl.name}
+          />
+        );
+      }
+      if (cl.eventType === "message") {
+        return (
+          <DateOfData
+            eventDate={cl.eventDate}
+            name={cl.message.name}
+            callTime={cl.message.messageTime}
+            callDuration={cl.call}
+            incomeType={cl.message.messageIcon}
+            message={cl.message.message}
+            key={cl.name}
+          />
+        );
+      }
+    });
+  }
 
   return (
     <>
@@ -23,20 +55,18 @@ const Post = () => {
           <div className="col-1">
             <hr className="vertical-line" />
           </div>
-          <div className="col-11 p-3">
-            <DateOfData eventDate="20,August 2020" />
-            <DateOfData eventDate="19,August 2020" />
+          <div className="col-11 p-3">{dateOfData}
           </div>
         </div>
       </div>
-      
+
       <br />
       <style jsx>{`
         .vertical-line {
           width: 4px;
 
           height: 100%;
-          background-color: rgb(245, 114, 66 );
+          background-color: rgb(245, 114, 66);
         }
         .timeline {
           padding: 0 0 0 60px;
@@ -48,4 +78,5 @@ const Post = () => {
     </>
   );
 };
+
 export default Post;
